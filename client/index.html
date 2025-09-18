@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Todofy</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="todofy-hero">
+    <div class="todofy-logo-glow">
+      <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#a5b4fc"/>
+            <stop offset="100%" stop-color="#f0abfc"/>
+          </radialGradient>
+        </defs>
+        <circle cx="32" cy="32" r="28" fill="url(#glow)" opacity="0.5"/>
+        <circle cx="32" cy="32" r="20" fill="#fff"/>
+        <text x="32" y="40" text-anchor="middle" font-size="2.2rem" font-family="'Segoe UI', Arial, sans-serif" fill="#6366f1" font-weight="bold">T</text>
+      </svg>
+    </div>
+    <h1 class="todofy-title">Todofy</h1>
+    <p class="todofy-tagline">Glorify your productivity</p>
+  </div>
+  <div id="root"></div>
+  <script src="bundle.js"></script>
+</body>
+</html>
