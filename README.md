@@ -16,7 +16,7 @@ A full stack, modern, and visually stunning MERN to-do list app.
 - React frontend (HTML, CSS, JS)
 - Node.js + Express backend
 - MongoDB for data storage
-dont know
+
 ## Getting Started
 
 ### Backend
