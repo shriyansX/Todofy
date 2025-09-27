@@ -18,6 +18,11 @@ const taskSchema = new mongoose.Schema({
     enum: ['pending', 'completed'],
     default: 'pending'
   },
+  userId: {
+    type: String,
+    required: [true, 'User ID is required'],
+    index: true
+  },
   createdAt: {
     type: Date,
     default: Date.now
@@ -31,7 +36,8 @@ const taskSchema = new mongoose.Schema({
 });
 
 // Add index for better query performance
-taskSchema.index({ status: 1, createdAt: -1 });
+taskSchema.index({ userId: 1, status: 1, createdAt: -1 });
+taskSchema.index({ userId: 1, createdAt: -1 });
 
 // Update the updatedAt field before saving
 taskSchema.pre('save', function(next) {

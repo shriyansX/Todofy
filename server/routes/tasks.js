@@ -2,13 +2,32 @@ const express = require('express');
 const router = express.Router();
 const Task = require('../models/Task');
 
+// Middleware to get user ID from headers or generate one
+const getUserId = (req, res, next) => {
+  // Get user ID from header (sent by frontend)
+  const userId = req.headers['x-user-id'];
+  
+  if (!userId || userId.trim().length === 0) {
+    return res.status(400).json({
+      success: false,
+      message: 'User ID is required. Please refresh the page.'
+    });
+  }
+  
+  req.userId = userId;
+  next();
+};
+
+// Apply getUserId middleware to all routes
+router.use(getUserId);
+
 // @route   GET /api/tasks
-// @desc    Get all tasks
+// @desc    Get all tasks for the current user
 // @access  Public
 router.get('/', async (req, res) => {
   try {
     const { status, sort = '-createdAt' } = req.query;
-    let filter = {};
+    let filter = { userId: req.userId };
     
     if (status && status !== 'all') {
       filter.status = status;
@@ -32,11 +51,11 @@ router.get('/', async (req, res) => {
 });
 
 // @route   GET /api/tasks/:id
-// @desc    Get single task by ID
+// @desc    Get single task by ID for the current user
 // @access  Public
 router.get('/:id', async (req, res) => {
   try {
-    const task = await Task.findById(req.params.id);
+    const task = await Task.findOne({ _id: req.params.id, userId: req.userId });
     
     if (!task) {
       return res.status(404).json({
@@ -67,7 +86,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // @route   POST /api/tasks
-// @desc    Create a new task
+// @desc    Create a new task for the current user
 // @access  Public
 router.post('/', async (req, res) => {
   try {
@@ -84,7 +103,8 @@ router.post('/', async (req, res) => {
     const task = new Task({
       title: title.trim(),
       description: description ? description.trim() : '',
-      status: status || 'pending'
+      status: status || 'pending',
+      userId: req.userId
     });
     
     const savedTask = await task.save();
@@ -113,14 +133,14 @@ router.post('/', async (req, res) => {
 });
 
 // @route   PUT /api/tasks/:id
-// @desc    Update a task
+// @desc    Update a task for the current user
 // @access  Public
 router.put('/:id', async (req, res) => {
   try {
     const { title, description, status } = req.body;
     
-    // Find the task first
-    let task = await Task.findById(req.params.id);
+    // Find the task first (ensure it belongs to the user)
+    let task = await Task.findOne({ _id: req.params.id, userId: req.userId });
     
     if (!task) {
       return res.status(404).json({
@@ -187,11 +207,11 @@ router.put('/:id', async (req, res) => {
 });
 
 // @route   DELETE /api/tasks/:id
-// @desc    Delete a task
+// @desc    Delete a task for the current user
 // @access  Public
 router.delete('/:id', async (req, res) => {
   try {
-    const task = await Task.findById(req.params.id);
+    const task = await Task.findOne({ _id: req.params.id, userId: req.userId });
     
     if (!task) {
       return res.status(404).json({
@@ -225,13 +245,14 @@ router.delete('/:id', async (req, res) => {
 });
 
 // @route   GET /api/tasks/stats
-// @desc    Get task statistics
+// @desc    Get task statistics for the current user
 // @access  Public
 router.get('/stats/summary', async (req, res) => {
   try {
-    const totalTasks = await Task.countDocuments();
-    const completedTasks = await Task.countDocuments({ status: 'completed' });
-    const pendingTasks = await Task.countDocuments({ status: 'pending' });
+    const userFilter = { userId: req.userId };
+    const totalTasks = await Task.countDocuments(userFilter);
+    const completedTasks = await Task.countDocuments({ ...userFilter, status: 'completed' });
+    const pendingTasks = await Task.countDocuments({ ...userFilter, status: 'pending' });
     
     res.json({
       success: true,
