@@ -33,7 +33,14 @@ app.use('/api/', limiter);
 // CORS configuration
 const corsOptions = {
   origin: process.env.NODE_ENV === 'production' 
-    ? ['https://todofy.vercel.app', 'https://todofy-git-main.vercel.app'] 
+    ? (origin, callback) => {
+        // Allow any Vercel deployment URL
+        if (!origin || /https:\/\/todofy.*\.vercel\.app$/.test(origin)) {
+          callback(null, true);
+        } else {
+          callback(new Error('Not allowed by CORS'));
+        }
+      }
     : ['http://localhost:3000', 'http://127.0.0.1:3000'],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
