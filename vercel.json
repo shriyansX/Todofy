@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "name": "todofy",
+  "name": "todofy-seven",
   "builds": [
     {
       "src": "client/package.json",
