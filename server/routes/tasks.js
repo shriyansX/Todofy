@@ -26,11 +26,34 @@ router.use(getUserId);
 // @access  Public
 router.get('/', async (req, res) => {
   try {
-    const { status, sort = '-createdAt' } = req.query;
+    const { status, priority, category, isStarred, isOverdue, sort = '-createdAt' } = req.query;
     let filter = { userId: req.userId };
     
     if (status && status !== 'all') {
       filter.status = status;
+    }
+    
+    if (priority) {
+      filter.priority = priority;
+    }
+    
+    if (category) {
+      filter.category = category;
+    }
+    
+    if (isStarred !== undefined) {
+      filter.isStarred = isStarred === 'true';
+    }
+    
+    if (isOverdue === 'true') {
+      filter.dueDate = { $lt: new Date() };
+      filter.status = 'pending';
+    } else if (req.query.today === 'true') {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const tomorrow = new Date(today);
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      filter.dueDate = { $gte: today, $lt: tomorrow };
     }
     
     const tasks = await Task.find(filter).sort(sort);
@@ -90,7 +113,18 @@ router.get('/:id', async (req, res) => {
 // @access  Public
 router.post('/', async (req, res) => {
   try {
-    const { title, description, status } = req.body;
+    const { 
+      title, 
+      description, 
+      status, 
+      priority, 
+      category, 
+      dueDate, 
+      tags, 
+      isStarred, 
+      estimatedTime,
+      subtasks 
+    } = req.body;
     
     // Validation
     if (!title || title.trim().length === 0) {
@@ -104,6 +138,13 @@ router.post('/', async (req, res) => {
       title: title.trim(),
       description: description ? description.trim() : '',
       status: status || 'pending',
+      priority: priority || 'medium',
+      category: category || 'general',
+      dueDate: dueDate || null,
+      tags: tags || [],
+      isStarred: isStarred || false,
+      estimatedTime: estimatedTime || null,
+      subtasks: subtasks || [],
       userId: req.userId
     });
     
@@ -137,7 +178,18 @@ router.post('/', async (req, res) => {
 // @access  Public
 router.put('/:id', async (req, res) => {
   try {
-    const { title, description, status } = req.body;
+    const { 
+      title, 
+      description, 
+      status, 
+      priority, 
+      category, 
+      dueDate, 
+      tags, 
+      isStarred, 
+      estimatedTime,
+      subtasks 
+    } = req.body;
     
     // Find the task first (ensure it belongs to the user)
     let task = await Task.findOne({ _id: req.params.id, userId: req.userId });
@@ -160,19 +212,15 @@ router.put('/:id', async (req, res) => {
       task.title = title.trim();
     }
     
-    if (description !== undefined) {
-      task.description = description.trim();
-    }
-    
-    if (status !== undefined) {
-      if (!['pending', 'completed'].includes(status)) {
-        return res.status(400).json({
-          success: false,
-          message: 'Status must be either "pending" or "completed"'
-        });
-      }
-      task.status = status;
-    }
+    if (description !== undefined) task.description = description.trim();
+    if (status !== undefined) task.status = status;
+    if (priority !== undefined) task.priority = priority;
+    if (category !== undefined) task.category = category;
+    if (dueDate !== undefined) task.dueDate = dueDate;
+    if (tags !== undefined) task.tags = tags;
+    if (isStarred !== undefined) task.isStarred = isStarred;
+    if (estimatedTime !== undefined) task.estimatedTime = estimatedTime;
+    if (subtasks !== undefined) task.subtasks = subtasks;
     
     const updatedTask = await task.save();
     

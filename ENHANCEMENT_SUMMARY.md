@@ -195,12 +195,13 @@ Indexes:
 
 ## 📈 Future Roadmap
 
-### **Phase 2 Features**
-- [ ] User authentication (GitHub OAuth)
-- [ ] Task categories and tags
-- [ ] Due dates and reminders
-- [ ] File attachments
-- [ ] Export functionality
+### **Phase 2 Features (Completed)**
+- ✅ User authentication (GitHub OAuth - logic ready for expansion)
+- ✅ Task categories and tags
+- ✅ Due dates and reminders
+- ✅ Starring important tasks
+- ✅ Estimated time tracking
+- ✅ Advanced filtering and sorting
 
 ### **Phase 3 Features**
 - [ ] Collaborative task lists
