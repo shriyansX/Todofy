@@ -1,20 +1,38 @@
 const express = require('express');
 const router = express.Router();
 const Task = require('../models/Task');
+const jwt = require('jsonwebtoken');
 
-// Middleware to get user ID from headers or generate one
+const JWT_SECRET = process.env.JWT_SECRET || 'todofy_secret_key_123';
+
+// Middleware to get user ID from JWT or fingerprint
 const getUserId = (req, res, next) => {
-  // Get user ID from header (sent by frontend)
-  const userId = req.headers['x-user-id'];
+  // 1. Try to get user ID from JWT token
+  const authHeader = req.headers.authorization;
+  if (authHeader && authHeader.startsWith('Bearer ')) {
+    try {
+      const token = authHeader.split(' ')[1];
+      const decoded = jwt.verify(token, JWT_SECRET);
+      req.userId = decoded.id;
+      req.isGuest = false;
+      return next();
+    } catch (err) {
+      console.warn('Invalid JWT token provided, falling back to fingerprint');
+    }
+  }
+
+  // 2. Fallback to browser fingerprint (sent by frontend as x-user-id)
+  const fingerprintId = req.headers['x-user-id'];
   
-  if (!userId || userId.trim().length === 0) {
+  if (!fingerprintId || fingerprintId.trim().length === 0) {
     return res.status(400).json({
       success: false,
-      message: 'User ID is required. Please refresh the page.'
+      message: 'Identification (JWT or User ID) is required.'
     });
   }
   
-  req.userId = userId;
+  req.userId = fingerprintId;
+  req.isGuest = true;
   next();
 };
 

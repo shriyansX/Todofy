@@ -6,12 +6,16 @@ require('dotenv').config();
 
 const connectDB = require('./config/database');
 const taskRoutes = require('./routes/tasks');
+const authRoutes = require('./routes/auth');
 
 // Create Express app
 const app = express();
 
 // Connect to MongoDB
-connectDB();
+connectDB().catch(err => {
+  console.error('❌ MongoDB Connection Error during startup:', err.message);
+  console.log('⚠️ Server starting without active DB connection. Running in limited/demo mode.');
+});
 
 // Security middleware
 app.use(helmet({
@@ -33,8 +37,13 @@ app.use('/api/', limiter);
 // CORS configuration
 const corsOptions = {
   origin: process.env.NODE_ENV === 'production' 
-    ? ['https://todofy-cihpef82y-shriyanss-projects-ce7d7e18.vercel.app', 'https://todofy-eexut0m8z-shriyanss-projects-ce7d7e18.vercel.app', /https:\/\/todofy.*\.vercel\.app$/]
-    : ['http://localhost:3000', 'http://127.0.0.1:3000'],
+    ? [
+        'https://todofy-seven.vercel.app',
+        'https://todofy-cihpef82y-shriyanss-projects-ce7d7e18.vercel.app', 
+        'https://todofy-eexut0m8z-shriyanss-projects-ce7d7e18.vercel.app', 
+        /https:\/\/todofy.*\.vercel\.app$/
+      ]
+    : ['http://localhost:3000', 'http://127.0.0.1:3000', 'http://localhost:5173'],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'x-user-id'],
   credentials: true
@@ -70,6 +79,7 @@ app.get('/api', (req, res) => {
 });
 
 // API Routes
+app.use('/api/auth', authRoutes);
 app.use('/api/tasks', taskRoutes);
 
 // 404 handler for undefined routes
