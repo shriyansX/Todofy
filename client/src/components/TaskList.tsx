@@ -1,5 +1,5 @@
 import React from 'react';
-import { ListTodo, CheckCircle, Clock, Filter, Star, AlertTriangle, CalendarDays, ArrowUpDown } from 'lucide-react';
+import { ListTodo, CheckCircle, Clock, Star, AlertTriangle, CalendarDays, ArrowUpDown } from 'lucide-react';
 import { Task, FilterType, UpdateTaskDto, SortType } from '../types';
 import TaskItem from './TaskItem';
 

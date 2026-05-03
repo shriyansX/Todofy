@@ -1,5 +1,5 @@
 import React from 'react';
-import { Check, X, Edit2, Trash2, Calendar, Clock, Star, Tag, Hash, Target, ChevronDown, ChevronUp } from 'lucide-react';
+import { Check, Edit2, Trash2, Calendar, Clock, Star, Tag, Target, ChevronDown, ChevronUp } from 'lucide-react';
 import { Task, UpdateTaskDto } from '../types';
 
 interface TaskItemProps {
