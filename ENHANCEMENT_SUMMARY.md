@@ -68,7 +68,7 @@
 
 ### 🚀 **5. Production Deployment**
 **Deployment Status**: ✅ Successfully deployed to Vercel
-- **Live URL**: [https://todofy-eexut0m8z-shriyanss-projects-ce7d7e18.vercel.app](https://todofy-eexut0m8z-shriyanss-projects-ce7d7e18.vercel.app)
+- **Live URL**: [https://todofy-seven.vercel.app](https://todofy-seven.vercel.app)
 - **Serverless Backend**: API deployed on Vercel
 - **Global CDN**: Fast worldwide access
 - **Automatic Builds**: Connected to git for continuous deployment
@@ -259,7 +259,7 @@ The Todofy application is now a complete, modern, production-ready task manageme
 - ✅ **Advanced Features**
 - ✅ **Technical Excellence**
 
-**Live Demo**: [https://todofy-eexut0m8z-shriyanss-projects-ce7d7e18.vercel.app](https://todofy-eexut0m8z-shriyanss-projects-ce7d7e18.vercel.app)
+**Live Demo**: [https://todofy-seven.vercel.app](https://todofy-seven.vercel.app)
 
 ---
 

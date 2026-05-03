@@ -2,7 +2,9 @@ import axios from 'axios';
 import { Task, CreateTaskDto, UpdateTaskDto, ApiResponse, TaskStats, FilterType } from '../types';
 import { UserUtils } from '../utils/userUtils';
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+const API_BASE_URL = process.env.NODE_ENV === 'production' 
+  ? '/api' 
+  : (process.env.REACT_APP_API_URL || 'http://localhost:5000/api');
 
 // Create axios instance with default config
 const api = axios.create({

@@ -85,7 +85,7 @@
   
   **Built with the MERN Stack + TypeScript + TailwindCSS**
   
-  [Live Demo](https://todofy-eexut0m8z-shriyanss-projects-ce7d7e18.vercel.app) • [Report Bug](https://github.com/shriyansX/Todofy/issues) • [Request Feature](https://github.com/shriyansX/Todofy/issues)
+  [Live Demo](https://todofy-seven.vercel.app) • [Report Bug](https://github.com/shriyansX/Todofy/issues) • [Request Feature](https://github.com/shriyansX/Todofy/issues)
   
 </div>modern design principles
 - Built with ❤️ for productivity enthusiasts
