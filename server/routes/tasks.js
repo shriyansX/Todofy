@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const mongoose = require('mongoose');
 const Task = require('../models/Task');
 const jwt = require('jsonwebtoken');
 
@@ -47,6 +48,40 @@ router.get('/', async (req, res) => {
     const { status, priority, category, isStarred, isOverdue, sort = '-createdAt' } = req.query;
     let filter = { userId: req.userId };
     
+    // Fallback if DB is not connected
+    if (mongoose.connection.readyState !== 1) {
+      console.warn('⚠️ MongoDB not connected. Returning mock data for demo mode.');
+      return res.json({
+        success: true,
+        isDemo: true,
+        count: 2,
+        data: [
+          {
+            id: 'demo-1',
+            title: 'Welcome to Todofy! 🚀',
+            description: 'This is a demo task because your MongoDB is not yet connected. Add your MONGODB_URI to Vercel to save real tasks!',
+            status: 'pending',
+            priority: 'urgent',
+            category: 'Welcome',
+            tags: ['demo', 'welcome'],
+            isStarred: true,
+            createdAt: new Date().toISOString()
+          },
+          {
+            id: 'demo-2',
+            title: 'Set up your Database',
+            description: 'Go to Vercel Settings -> Environment Variables and add MONGODB_URI.',
+            status: 'pending',
+            priority: 'high',
+            category: 'Setup',
+            tags: ['setup'],
+            isStarred: false,
+            createdAt: new Date().toISOString()
+          }
+        ]
+      });
+    }
+
     if (status && status !== 'all') {
       filter.status = status;
     }
@@ -315,6 +350,14 @@ router.delete('/:id', async (req, res) => {
 // @access  Public
 router.get('/stats/summary', async (req, res) => {
   try {
+    // Fallback if DB is not connected
+    if (mongoose.connection.readyState !== 1) {
+      return res.json({
+        success: true,
+        data: { total: 2, completed: 0, pending: 2, completionRate: 0 }
+      });
+    }
+
     const userFilter = { userId: req.userId };
     const totalTasks = await Task.countDocuments(userFilter);
     const completedTasks = await Task.countDocuments({ ...userFilter, status: 'completed' });
