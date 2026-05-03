@@ -4,9 +4,9 @@
   
   ![Todofy Demo](https://via.placeholder.com/600x300/3b82f6/ffffff?text=Todofy+Advanced+Task+Manager)
   
-  **A beautiful, premium task management application with advanced features and privacy-first design.**
+  **A beautiful, premium task management application with advanced features and full-stack authentication.**
   
-  [![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen)](https://todofy-eexut0m8z-shriyanss-projects-ce7d7e18.vercel.app)
+  [![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen)](https://todofy-seven.vercel.app)
   [![Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-000000.svg)](https://vercel.com)
   [![MongoDB](https://img.shields.io/badge/Database-MongoDB-47A248.svg)](https://mongodb.com)
   
@@ -14,10 +14,11 @@
 
 ## ✨ Advanced Features
 
-### 🔐 **User Privacy & Isolation**
-- **Private task sessions** - Each user gets their own isolated task workspace using browser fingerprinting.
-- **No registration required** - Start using immediately without giving away personal data.
-- **Session management** - View your unique session ID and reset it if needed.
+### 🔐 **Full-Stack Authentication**
+- **User Accounts** - Sign up and Log in to save your tasks permanently across devices.
+- **JWT Security** - Secure session management using JSON Web Tokens.
+- **Guest Mode** - Still supports anonymous usage via browser fingerprinting if you don't want an account.
+- **Auto-Sync** - Tasks are associated with your account automatically when you log in.
 
 ### 🎨 **Premium UI/UX Design**
 - **Glass-morphism & Gradients** - Modern, sleek interface with beautiful animated backgrounds.
